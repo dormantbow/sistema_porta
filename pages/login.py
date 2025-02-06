@@ -14,14 +14,14 @@ def show():
             if role:
                 st.session_state.authenticated = True
                 st.session_state.role = role  # Armazena o papel do usuário
-                st.experimental_rerun()  # Recarrega o app para mudar de tela
+                st.rerun()  # Recarrega o app para mudar de tela
             else:
                 st.error("Usuário ou senha incorretos")
     
     with col2:
         if st.button("Esqueci minha senha"):
             st.session_state.show_reset_password = True  # Marca que a tela de redefinição deve ser exibida
-            st.experimental_rerun()
+            st.rerun() 
 
     # Exibe o formulário de redefinição de senha, se ativado
     if st.session_state.get("show_reset_password", False):
