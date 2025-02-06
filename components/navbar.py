@@ -33,14 +33,3 @@ elif page == "Configurações":
     
     
 
-# CSS para remover a barra lateral padrão
-st.markdown(
-    """
-    <style>
-    [data-testid="stSidebar"] {
-        display: none;
-    }
-    </style>
-    """,
-    unsafe_allow_html=True,
-)

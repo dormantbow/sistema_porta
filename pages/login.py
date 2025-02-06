@@ -44,16 +44,3 @@ def show_reset_password():
         st.session_state.show_reset_password = False
         st.experimental_rerun()
 
-
-# CSS para remover a barra lateral padrão
-st.markdown(
-    """
-    <style>
-    [data-testid="stSidebar"] {
-        display: none;
-    }
-    </style>
-    """,
-    unsafe_allow_html=True,
-)
-

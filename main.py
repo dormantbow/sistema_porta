@@ -1,6 +1,6 @@
 import streamlit as st
 from pages import login, home
-from components import navbar
+#from components import navbar
 
 st.set_page_config(page_title="Meu App", layout="wide")
 
@@ -8,8 +8,8 @@ st.set_page_config(page_title="Meu App", layout="wide")
 
 
 # Chamar a navbar
-menu = ["Home", "Login", "Dashboard", "Configurações"]
-navbar.navbar(menu) 
+#menu = ["Home", "Login", "Dashboard", "Configurações"]
+#navbar.navbar(menu) 
 
 # Criando uma variável de sessão para controle do login
 if "authenticated" not in st.session_state:
@@ -22,14 +22,4 @@ else:
     home.show()
 
 
-# CSS para remover a barra lateral padrão
-st.markdown(
-    """
-    <style>
-    [data-testid="stSidebar"] {
-        display: none;
-    }
-    </style>
-    """,
-    unsafe_allow_html=True,
-)
+
