@@ -1,5 +1,6 @@
 1º pip install streamlit
 confirmar instalação
+
 2º streamlit --version
 
 
