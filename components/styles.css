@@ -1,0 +1,45 @@
+/* Centralizar o layout */
+body {
+    background-color: #f7f8fa;
+    font-family: Arial, sans-serif;
+}
+
+/* Container principal */
+.login-box {
+    background-color: #fff;
+    border-radius: 10px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    padding: 20px;
+    width: 100%;
+    max-width: 320px;
+    margin: auto;
+    text-align: center;
+}
+
+/* Estilo dos inputs */
+.stTextInput input {
+    border: 1px solid #ccc !important;
+    border-radius: 5px !important;
+    padding: 10px !important;
+}
+
+/* Botão de entrada */
+.stButton button {
+    background-color: #00bfa6 !important;
+    color: white !important;
+    border: none !important;
+    border-radius: 5px !important;
+    padding: 10px !important;
+    font-size: 16px !important;
+    font-weight: bold !important;
+    cursor: pointer !important;
+}
+
+.stButton button:hover {
+    background-color: #008f7a !important;
+}
+
+/* Ajustar o espaço entre os campos */
+.stTextInput {
+    margin-bottom: 15px;
+}
