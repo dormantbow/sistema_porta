@@ -1,6 +1,8 @@
 import streamlit as st
 import requests
 
+
+
 def get_doors():
     """Função para buscar dados da API"""
     api_url = "http://127.0.0.1:8000/portas"  # Substitua pela URL real da API
@@ -48,7 +50,7 @@ def show():
             st.markdown(
                 f"""
                 <div style="border: 1px solid #ddd; padding: 15px; border-radius: 10px; text-align: center; background: white;">
-                    <h4 style="margin: 0;">{door["nome"]}</h4>
+                    <h4 style="margin: 0; color: #000; font-weight: bold;">{door["nome"]}</h4>
                     <span style="color: {'red' if door['status'] == 'ABERTO' else 'green'}; font-weight: bold; border: 1px solid; padding: 5px; border-radius: 5px;">
                         {door["status"]}
                     </span>
