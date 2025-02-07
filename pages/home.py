@@ -32,7 +32,16 @@ def show():
         selected_category = st.selectbox("Filtrar", ["Todas"] + categories)
 
     with col3:
-        st.button("Opções", key="options")
+        with st.expander("Opções"):
+            if st.button("Informar erro"):
+                st.write("Funcionalidade em construção.")
+
+            if st.button("Modificar Senha"):
+                st.write("Funcionalidade em construção.")
+                
+            if st.button("Sair"):
+                st.session_state.authenticated = False # Controla o estado do login
+                st.switch_page("main.py") # Redireciona para a página de login
 
     # Filtrar portas conforme a busca e categoria
     filtered_doors = [
