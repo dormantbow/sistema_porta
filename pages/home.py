@@ -5,7 +5,7 @@ import requests
 
 def get_doors():
     """Função para buscar dados da API"""
-    api_url = "http://127.0.0.1:8000/portas"  # Substitua pela URL real da API
+    api_url = "http://127.0.0.1:4040/portas"  # Substitua pela URL real da API
     try:
         response = requests.get(api_url)
         response.raise_for_status()
