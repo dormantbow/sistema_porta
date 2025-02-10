@@ -12,6 +12,6 @@ def show():
             st.session_state.authenticated = True  # Marca o usuário como autenticado
             st.session_state.user_role = role  # Armazena o papel do usuário
             st.session_state.current_page = "home"  # Redireciona para a página inicial
-            st.experimental_rerun()  # Recarrega a aplicação
+            st.rerun()  # Recarrega a aplicação
         else:
             st.error("Usuário ou senha inválidos.")
