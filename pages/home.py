@@ -3,7 +3,7 @@ import requests
 
 def get_doors():
     """Função para buscar dados da API"""
-    api_url = "http://127.0.0.1:8000/portas"  # Substitua pela URL real da API
+    api_url = "http://de2b-2804-1b1-a940-f79a-682b-4a2b-6135-5068.ngrok-free.app/api/room/listAll/"
     try:
         response = requests.get(api_url)
         response.raise_for_status()
@@ -29,32 +29,20 @@ def show():
 
     # Barra superior com busca e filtros
     st.markdown("<h2 style='text-align: center;'>Painel de Portas</h2>", unsafe_allow_html=True)
-    col1, col2, col3 = st.columns([3, 2, 1])
+    col1, col2 = st.columns([3, 2])
 
     with col1:
         search_query = st.text_input("Buscar porta", placeholder="Digite o nome da porta...")
 
     with col2:
-        categories = list(set(door["categoria"] for door in doors)) if doors else []
-        selected_category = st.selectbox("Filtrar", ["Todas"] + categories)
-
-    with col3:
-        with st.expander("Opções"):
-            if st.button("Informar erro"):
-                st.write("Funcionalidade em construção.")
-
-            if st.button("Modificar Senha"):
-                st.write("Funcionalidade em construção.")
-                
-            if st.button("Sair"):
-                st.session_state.authenticated = False # Controla o estado do login
-                st.switch_page("main.py") # Redireciona para a página de login
+        categories = list(set(door["department"]["name"] for door in doors)) if doors else []
+        selected_category = st.selectbox("Filtrar por Departamento", ["Todos"] + categories)
 
     # Filtrar portas conforme a busca e categoria
     filtered_doors = [
         door for door in doors
-        if (search_query.lower() in door["nome"].lower()) and
-           (selected_category == "Todas" or door["categoria"] == selected_category)
+        if (search_query.lower() in door["name"].lower()) and
+           (selected_category == "Todos" or door["department"]["name"] == selected_category)
     ]
 
     # Verifica se há portas após o filtro
@@ -68,19 +56,21 @@ def show():
 
     for idx, door in enumerate(filtered_doors):
         with cols[idx % 4]:
+            status = "Ativo" if door["admin"] else "Inativo"  # Define status baseado na presença de admins
+            
             st.markdown(
                 f"""
                 <div style="border: 1px solid #ddd; padding: 15px; border-radius: 10px; text-align: center; background: white;">
-                    <h4 style="margin: 0; color: black;">{door["nome"]}</h4>
-                    <span style="color: {'red' if door['status'] == 'ABERTO' else 'green'}; font-weight: bold; border: 1px solid; padding: 5px; border-radius: 5px;">
-                        {door["status"]}
+                    <h4 style="margin: 0; color: black;">{door["name"]}</h4>
+                    <span style="color: {'green' if status == 'Ativo' else 'red'}; font-weight: bold; border: 1px solid; padding: 5px; border-radius: 5px;">
+                        {status}
                     </span>
                 </div>
                 """, unsafe_allow_html=True
             )
-            if st.button(f"Selecionar {door['nome']}", key=f"btn_{door['id']}"):
+            if st.button(f"Selecionar {door['name']}", key=f"btn_{door['id']}"):
                 st.session_state["selected_door_id"] = door["id"]
-                st.session_state["current_page"] = "door_info"
+                st.session_state["current_page"] = "info_porta"
                 st.rerun()
 
     # Rodapé
@@ -88,4 +78,4 @@ def show():
         '<p style="text-align:center; margin-top:30px; color:gray;">'
         '2025. Desenvolvido por EJ Turing Consultoria e Desenvolvimento.</p>',
         unsafe_allow_html=True
-    )
+    ) 
