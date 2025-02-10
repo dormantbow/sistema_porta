@@ -39,7 +39,6 @@ def show():
         selected_category = st.selectbox("Filtrar", ["Todas"] + categories)
 
     with col3:
-<<<<<<< Updated upstream
         with st.expander("Opções"):
             if st.button("Informar erro"):
                 st.write("Funcionalidade em construção.")
@@ -50,21 +49,6 @@ def show():
             if st.button("Sair"):
                 st.session_state.authenticated = False # Controla o estado do login
                 st.switch_page("main.py") # Redireciona para a página de login
-=======
-        with st.expander("⚙️ Opções"):
-            option = st.radio("Escolha uma opção:", ["Informar erro", "Modificar senha", "Sair"])
-
-            if option == "Informar erro":
-                st.warning("Você selecionou 'Informar erro'. Aqui você pode adicionar um formulário futuramente.")
-
-            elif option == "Modificar senha":
-                st.info("Você selecionou 'Modificar senha'. Redirecionando...")  
-
-            elif option == "Sair":
-                st.session_state.authenticated = False
-                st.switch_page("main.py")
-                
->>>>>>> Stashed changes
 
     # Filtrar portas conforme a busca e categoria
     filtered_doors = [
