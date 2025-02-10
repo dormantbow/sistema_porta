@@ -1,17 +1,35 @@
 import streamlit as st
-from utils.auth import check_credentials  # Importa a função de autenticação
+from utils.auth import check_credentials
 
 def show():
     st.title("Login")
-    username = st.text_input("Usuário")
-    password = st.text_input("Senha", type="password")
 
-    if st.button("Entrar"):
-        role = check_credentials(username, password)  # Verifica as credenciais
-        if role:
-            st.session_state.authenticated = True  # Marca o usuário como autenticado
-            st.session_state.user_role = role  # Armazena o papel do usuário
-            st.session_state.current_page = "home"  # Redireciona para a página inicial
-            st.experimental_rerun()  # Recarrega a aplicação
-        else:
-            st.error("Usuário ou senha inválidos.")
+    # Inicializa a sessão do usuário se ainda não existir
+    if "authenticated" not in st.session_state:
+        st.session_state.authenticated = False
+        st.session_state.role = None
+        st.session_state.username = None
+
+    if st.session_state.authenticated:
+        st.success(f"Bem-vindo, {st.session_state.username} ({st.session_state.role})!")
+        if st.button("Sair"):
+            st.session_state.authenticated = False
+            st.session_state.username = None
+            st.session_state.role = None
+            st.rerun()
+    else:
+        username = st.text_input("Usuário")
+        password = st.text_input("Senha", type="password")
+
+        if st.button("Entrar"):
+            role = check_credentials(username, password)
+            if role:
+                st.session_state.authenticated = True
+                st.session_state.username = username
+                st.session_state.role = role
+                st.rerun()
+            else:
+                st.error("Usuário ou senha incorretos!")
+
+if __name__ == "__main__":
+    show()
