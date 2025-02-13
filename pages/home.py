@@ -3,7 +3,8 @@ import requests
 
 def get_doors():
     """Função para buscar dados da API"""
-    api_url = "http://de2b-2804-1b1-a940-f79a-682b-4a2b-6135-5068.ngrok-free.app/api/room/listAll/"
+    # api_url = "http://de2b-2804-1b1-a940-f79a-682b-4a2b-6135-5068.ngrok-free.app/api/room/listAll/"
+    api_url = "http://127.0.0.1:8000/portas"
     try:
         response = requests.get(api_url)
         response.raise_for_status()
