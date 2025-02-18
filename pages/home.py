@@ -5,7 +5,7 @@ import requests
 
 def get_doors():
     """Função para buscar dados da API"""
-    api_url = "https://313b-2804-16d8-c6fe-100-880a-58a-e138-cae0.ngrok-free.app/api/room/listAll/"
+    api_url = "http://de2b-2804-1b1-a940-f79a-682b-4a2b-6135-5068.ngrok-free.app/api/room/listAll/"
     try:
         response = requests.get(api_url)
         response.raise_for_status()
@@ -54,6 +54,17 @@ def show():
             if st.button("Sair"):
                 st.session_state.authenticated = False  # Controla o estado do login
                 st.switch_page("main.py")  # Redireciona para a página de login
+
+    with col3:
+        st.button("Opções", key="options")
+        with st.expander("Opções"):
+            if st.button("Informar erro"):
+                st.write("Funcionalidade em construção.")
+            if st.button("Modificar Senha"):
+                st.write("Funcionalidade em construção.")
+            if st.button("Sair"):
+                st.session_state.authenticated = False # Controla o estado do login
+                st.switch_page("main.py") # Redireciona para a página de login
 
     # Filtrar portas conforme a busca e categoria
     filtered_doors = [
