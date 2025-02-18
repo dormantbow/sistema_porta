@@ -1,5 +1,5 @@
 import streamlit as st
-from pages import home, info_porta, login  # Certifique-se de que os arquivos existem!
+from pages import home, info_porta, login, modificar_senha  # Certifique-se de que os arquivos existem!
 
 st.set_page_config(page_title="Portal Fácil", layout="wide")
 
@@ -20,3 +20,5 @@ elif st.session_state.current_page == "home":
     home.show()
 elif st.session_state.current_page == "info_porta":
     info_porta.show()
+elif st.session_state.current_page == "modificar_senha":
+    modificar_senha.show()
