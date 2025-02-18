@@ -1,26 +1,33 @@
 import streamlit as st
 import requests
 
+
+
 def get_doors():
     """Função para buscar dados da API"""
-    api_url = "http://de2b-2804-1b1-a940-f79a-682b-4a2b-6135-5068.ngrok-free.app/api/room/listAll/"
+    api_url = "https://313b-2804-16d8-c6fe-100-880a-58a-e138-cae0.ngrok-free.app/api/room/listAll/"
     try:
         response = requests.get(api_url)
         response.raise_for_status()
-        try:
-            return response.json()  # Retorna os dados como JSON
-        except ValueError:
-            st.error("Erro: A resposta da API não é um JSON válido.")
-            return []
+        return response.json()  # Retorna os dados como JSON
     except requests.exceptions.RequestException as e:
-        st.error(f"Erro ao buscar dados: {e}")
-        return []
+        st.error(f"Erro ao buscar dados da API: {e}")
+        return None  # Retorna None em caso de erro
 
 def show():
     """Função chamada pelo main.py para exibir a tela"""
 
+    st.markdown("<h2 style='text-align: center;'>Painel de Portas</h2>", unsafe_allow_html=True)
+
     # Buscar dados da API
     doors = get_doors()
+
+    # Se houver erro ao carregar as portas, exibir botão de tentativa
+    if doors is None:
+        st.warning("Não foi possível carregar os dados. Verifique sua conexão ou tente novamente.")
+        if st.button("Tentar novamente 🔄"):
+            st.rerun()
+        return
 
     # Verifica se há portas carregadas antes de tentar filtrá-las
     if not doors:
@@ -28,8 +35,7 @@ def show():
         return
 
     # Barra superior com busca e filtros
-    st.markdown("<h2 style='text-align: center;'>Painel de Portas</h2>", unsafe_allow_html=True)
-    col1, col2 = st.columns([3, 2])
+    col1, col2, col3 = st.columns([3, 2, 1])
 
     with col1:
         search_query = st.text_input("Buscar porta", placeholder="Digite o nome da porta...")
@@ -37,6 +43,17 @@ def show():
     with col2:
         categories = list(set(door["department"]["name"] for door in doors)) if doors else []
         selected_category = st.selectbox("Filtrar por Departamento", ["Todos"] + categories)
+    
+    with col3:
+        with st.expander("Opções"):
+            if st.button("Informar erro"):
+                st.session_state.current_page = "report_error"
+                st.rerun()
+            if st.button("Modificar Senha"):
+                st.write("Funcionalidade em construção.")
+            if st.button("Sair"):
+                st.session_state.authenticated = False  # Controla o estado do login
+                st.switch_page("main.py")  # Redireciona para a página de login
 
     # Filtrar portas conforme a busca e categoria
     filtered_doors = [
@@ -78,4 +95,4 @@ def show():
         '<p style="text-align:center; margin-top:30px; color:gray;">'
         '2025. Desenvolvido por EJ Turing Consultoria e Desenvolvimento.</p>',
         unsafe_allow_html=True
-    ) 
+    )
