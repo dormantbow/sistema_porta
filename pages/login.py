@@ -1,5 +1,5 @@
 import streamlit as st
-from utils.auth import check_credentials, reset_password  # Adicionamos reset_password
+from utils.auth import check_credentials, reset_password
 
 def show():
     st.title("Login")
@@ -7,10 +7,9 @@ def show():
     if "authenticated" not in st.session_state:
         st.session_state.authenticated = False
         st.session_state.username = None
-        st.session_state.role = None
 
     if st.session_state.authenticated:
-        st.success(f"Bem-vindo, {st.session_state.username} ({st.session_state.role})!")
+        st.success(f"Bem-vindo, {st.session_state.username}!")
         if st.button("Ir para Home"):
             st.session_state.current_page = "home"
             st.rerun()
@@ -23,11 +22,9 @@ def show():
         password = st.text_input("Senha", type="password")
 
         if st.button("Entrar"):
-            role = check_credentials(username, password)
-            if role:
+            if check_credentials(username, password):
                 st.session_state.authenticated = True
                 st.session_state.username = username
-                st.session_state.role = role
                 st.session_state.current_page = "home"
                 st.rerun()
             else:
@@ -57,4 +54,3 @@ def show():
                         st.rerun()
                     else:   
                         st.error("Usuário não encontrado ou erro ao redefinir a senha.")
-
