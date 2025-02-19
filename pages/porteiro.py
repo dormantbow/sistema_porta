@@ -58,26 +58,26 @@ with st.form("my_form"):
 
 
 #read
-# comando = f'SELECT * FROM vendas '
+# comando = f'SELECT * FROM porteiros '
 # cursor.execute(comando)
-# resultado = cursor.fetchall() #ler o banco de dados
+# resultado = cursor.fetchall() # sempre que for ler o banco de dados
 # print(resultado)
 
 
 #update
-# nomeProduto = "todynho"
-# valor = 6
-# comando = f'UPDATE vendas SET valor = {valor} WHERE nomeProduto = "{nomeProduto}"'
+# nomeCompleto = "matheus"
+# senha = abcde
+# comando = f'UPDATE porteiros SET senha = "{senha}" WHERE nomeCompleto = "{nomeCompleto}"'
 # cursor.execute(comando)
-# conexao.commit() # edita o banco de dados
+# conexao.commit() # sempre que for  alterar o banco de dados
 
 
 
 #delete
-# nomeProduto = "todynho"
-# comando = f'DELETE from vendas WHERE nomeProduto = "{nomeProduto}"'
+# nomeCompleto = "jose"
+# comando = f'DELETE from porteiros WHERE nomeCompleto = "{nomeCompleto}"'
 # cursor.execute(comando)
-# conexao.commit() # edita o banco de dados
+# conexao.commit() # sempre que for  alterar o banco de dados
 
 cursor.close()
 conexao.close()
