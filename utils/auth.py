@@ -1,9 +1,31 @@
 # utils/auth.py
 
+import streamlit as st
+import mysql.connector
+import sqlite3
+import bcrypt
+from validate_docbr import CPF
 import smtplib
 from email.mime.text import MIMEText
 
+conexao = mysql.connector.connect(
+    host = 'localhost',
+    user = 'root',
+    password = 'admin123',
+    database = 'bdporteiros',
+)
+cursor = conexao.cursor()
 # Lista de usuários com informações adicionais
+comando = 'SELECT * FROM porteiros'
+cursor.execute(comando)
+resultados = cursor.fetchall()
+
+# Obtendo os nomes das colunas
+colunas = [desc[0] for desc in cursor.description]
+
+# Convertendo os resultados para um dicionário
+USERS = [dict(zip(colunas, linha)) for linha in resultados]
+
 USERS = {
     "porteiro": {"password": "1234", "role": "porteiro"},  # Exemplo de um porteiro
     "admin": {"password": "admin123", "role": "admin"},
