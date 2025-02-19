@@ -7,24 +7,13 @@ import bcrypt
 from validate_docbr import CPF
 import smtplib
 from email.mime.text import MIMEText
-#import logging
-conexao = mysql.connector.connect(
-    host = 'localhost',
-    user = 'root',
-    password = 'root',
-    database = 'bdporteiros',
-)
-cursor = conexao.cursor()
-# Lista de usuários com informações adicionais
-comando = 'SELECT * FROM usuario'
-cursor.execute(comando)
-resultados = cursor.fetchall()
 
-# Obtendo os nomes das colunas
-colunas = [desc[0] for desc in cursor.description]
-#logger = logging.getLogger(__name__)
-# Convertendo os resultados para um dicionário
-USERS = {linha[0]: dict(zip(colunas[1:], linha[1:])) for linha in resultados}
+# Lista de usuários com informações adicionais
+USERS = {
+    "porteiro": {"password": "1234", "role": "porteiro"},  # Exemplo de um porteiro
+    "admin": {"password": "admin123", "role": "admin"},
+    "usuario1": {"password": "senha1", "role": "viewer"},
+}
 
 def check_credentials(username, password):
     """

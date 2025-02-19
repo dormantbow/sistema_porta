@@ -57,27 +57,27 @@ def show():
 
 
 
-    #read
-    # comando = f'SELECT * FROM vendas '
-    # cursor.execute(comando)
-    # resultado = cursor.fetchall() #ler o banco de dados
-    # print(resultado)
+#read
+# comando = f'SELECT * FROM vendas '
+# cursor.execute(comando)
+# resultado = cursor.fetchall() #ler o banco de dados
+# print(resultado)
 
 
-    #update
-    # nomeProduto = "todynho"
-    # valor = 6
-    # comando = f'UPDATE vendas SET valor = {valor} WHERE nomeProduto = "{nomeProduto}"'
-    # cursor.execute(comando)
-    # conexao.commit() # edita o banco de dados
+#update
+# nomeProduto = "todynho"
+# valor = 6
+# comando = f'UPDATE vendas SET valor = {valor} WHERE nomeProduto = "{nomeProduto}"'
+# cursor.execute(comando)
+# conexao.commit() # edita o banco de dados
 
 
 
-    #delete
-    # nomeProduto = "todynho"
-    # comando = f'DELETE from vendas WHERE nomeProduto = "{nomeProduto}"'
-    # cursor.execute(comando)
-    # conexao.commit() # edita o banco de dados
+#delete
+# nomeProduto = "todynho"
+# comando = f'DELETE from vendas WHERE nomeProduto = "{nomeProduto}"'
+# cursor.execute(comando)
+# conexao.commit() # edita o banco de dados
 
     cursor.close()
     conexao.close()
