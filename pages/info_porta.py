@@ -3,8 +3,8 @@ import requests
 from fpdf import FPDF
 from datetime import datetime
 
-API_URL = "https://97f3-2804-16d8-e226-100-60c7-91ff-9f4a-8bba.ngrok-free.app/api/room/{id}/"
-LOGS_API_URL = "https://97f3-2804-16d8-e226-100-60c7-91ff-9f4a-8bba.ngrok-free.app/api/logs/{id}/"
+API_URL = "https://c886-2804-16d8-c6fe-100-3c79-9e2b-5b62-8a35.ngrok-free.app/api/room/{id}/"
+LOGS_API_URL = "https://c886-2804-16d8-c6fe-100-3c79-9e2b-5b62-8a35.ngrok-free.app/api/logs/{id}/"
 
 #função que gera o relatório com logs
 def generate_pdf_with_logs(door_info, logs, start_date, end_date):

@@ -1,11 +1,9 @@
 import streamlit as st
 import requests
 
-
-
 def get_doors():
     """Função para buscar dados da API"""
-    api_url = "https://97f3-2804-16d8-e226-100-60c7-91ff-9f4a-8bba.ngrok-free.app/api/room/listAll/"
+    api_url = "https://c886-2804-16d8-c6fe-100-3c79-9e2b-5b62-8a35.ngrok-free.app/api/room/listAll/"
     try:
         response = requests.get(api_url)
         response.raise_for_status()
@@ -55,7 +53,12 @@ def show():
                 st.session_state.authenticated = False  # Controla o estado do login
                 st.switch_page("main.py")  # Redireciona para a página de login
 
-    
+    # Adicionando o botão "Acessar Página do Porteiro" para administradores
+    if st.session_state.role == 1:  # Verifica se o usuário é admin (role = 1)
+        if st.button("Acessar Página do Porteiro"):
+            st.session_state.current_page = "porteiro"
+            st.rerun()
+
     # Filtrar portas conforme a busca e categoria
     filtered_doors = [
         door for door in doors

@@ -1,5 +1,5 @@
 import streamlit as st
-from pages import home, info_porta, login, report_error# Certifique-se de que os arquivos existem!
+from pages import home, info_porta, login, report_error, porteiro# Certifique-se de que os arquivos existem!
 from utils import auth
 
 st.set_page_config(
@@ -18,8 +18,12 @@ if "role" not in st.session_state:
     st.session_state.role = None  # Adiciona uma variável para o role
 
 # Se não estiver autenticado, garante que a página de login seja mostrada
-if st.session_state.authenticated:
-    # Renderiza a página com base na sessão
+if not st.session_state.authenticated:
+    print("Debug: Usuário não autenticado. Redirecionando para a página de login.")  # Debug
+    st.session_state.current_page = "login"
+    login.show()
+else:
+    print(f"Debug: Usuário autenticado. Página atual: {st.session_state.current_page}")  # Debug
     if st.session_state.current_page == "login":
         login.show()
     elif st.session_state.current_page == "home":
@@ -29,14 +33,11 @@ if st.session_state.authenticated:
     elif st.session_state.current_page == "report_error":
         report_error.show()
     elif st.session_state.current_page == "porteiro":
-        # Verifica se o usuário está autenticado e se tem permissão de administrador
-        if st.session_state.role == 1:
-            porteiro.show()  # Exibe a página do porteiro
+        if st.session_state.role == 1:  # Verifica se o usuário é admin (role = 1)
+            print("Debug: Usuário é admin. Acessando página do porteiro.")  # Debug
+            porteiro.show()
         else:
+            print("Debug: Usuário não tem permissão para acessar a página do porteiro.")  # Debug
             st.error("Você não tem permissão para acessar esta página. Apenas administradores podem acessá-la.")
             st.session_state.current_page = "home"  # Redireciona para a página inicial
             st.rerun()
-else:   
-    st.session_state.current_page = "login"
-    login.show()
-    

@@ -5,6 +5,7 @@ import bcrypt
 from validate_docbr import CPF
 
 def show():
+    
     conexao = mysql.connector.connect(
         host = 'localhost',
         user = 'root',
@@ -33,14 +34,13 @@ def show():
         nome = st.text_input("Nome completo:")
         cpf = st.text_input("CPF:")
 
-        
         st.warning("⚠️ Digite um CPF válido com 11 números.")
-
-
+        
         senha = st.text_input("Senha:", type="password")
         
         # Every form must have a submit button.
         submitted = st.form_submit_button("Enviar")
+        voltar = st.form_submit_button("Voltar")
         if submitted:
             if cpf.isdigit() and len(cpf) == 11:
                 if validar_cpf(cpf):
@@ -51,7 +51,12 @@ def show():
             else:
                 st.warning("⚠️ Digite um CPF válido com 11 números.")
             
-            
+        if voltar:
+            st.session_state.current_page = "home"
+            st.rerun()
+       
+    cursor.close()
+    conexao.close()            
 
 
 
@@ -78,6 +83,3 @@ def show():
 # comando = f'DELETE from vendas WHERE nomeProduto = "{nomeProduto}"'
 # cursor.execute(comando)
 # conexao.commit() # edita o banco de dados
-
-    cursor.close()
-    conexao.close()
