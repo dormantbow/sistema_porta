@@ -1,16 +1,35 @@
 import streamlit as st
 import requests
-
+import json
 def get_doors():
     """Função para buscar dados da API"""
-    api_url = "https://c886-2804-16d8-c6fe-100-3c79-9e2b-5b62-8a35.ngrok-free.app/api/room/listAll/"
+    
+    # Verifique se o token está presente
+    if "token" not in st.session_state:
+        st.error("Você precisa estar logado para acessar essa página.")
+        st.stop()  # Para a execução do código aqui
+    
+    api_url = "http://localhost:8000/api/room/listAll/"
+    headers = {
+        "Authorization": f"Bearer {st.session_state.token}"  # Corrigido aqui
+    }
+    #st.write(f"Headers enviados: {headers}")  # Debug
+    #st.write(f"Token armazenado: {st.session_state.token}")
+
     try:
-        response = requests.get(api_url)
-        response.raise_for_status()
-        return response.json()  # Retorna os dados como JSON
-    except requests.exceptions.RequestException as e:
-        st.error(f"Erro ao buscar dados da API: {e}")
-        return None  # Retorna None em caso de erro
+        #st.write("Headers enviados:", json.dumps(headers, indent=2))  # Debug
+        # Faz a requisição à API
+        response = requests.get(api_url, headers=headers)
+        
+        # Verifica o status da resposta
+        if response.status_code == 200:
+            return response.json()  # Retorna a lista de portas
+        else:
+            st.error(f"Erro ao buscar as portas: {response.status_code} - {response.text}")
+            return None
+    except Exception as e:
+        st.error(f"Ocorreu um erro ao tentar se conectar à API: {e}")
+        return None
 
 def show():
     """Função chamada pelo main.py para exibir a tela"""
@@ -47,17 +66,15 @@ def show():
             if st.button("Informar erro"):
                 st.session_state.current_page = "report_error"
                 st.rerun()
-            if st.button("Modificar Senha"):
-                st.write("Funcionalidade em construção.")
             if st.button("Sair"):
                 st.session_state.authenticated = False  # Controla o estado do login
                 st.switch_page("main.py")  # Redireciona para a página de login
 
-    # Adicionando o botão "Acessar Página do Porteiro" para administradores
-    if st.session_state.role == 1:  # Verifica se o usuário é admin (role = 1)
-        if st.button("Acessar Página do Porteiro"):
-            st.session_state.current_page = "porteiro"
-            st.rerun()
+    if st.session_state.authenticated:
+        portas = get_doors()
+        #if portas:
+            #st.write("Lista de Portas:")
+            #st.json(portas)  # Exibe o JSON das portas
 
     # Filtrar portas conforme a busca e categoria
     filtered_doors = [

@@ -3,10 +3,10 @@ import requests
 from fpdf import FPDF
 from datetime import datetime
 
-API_URL = "https://c886-2804-16d8-c6fe-100-3c79-9e2b-5b62-8a35.ngrok-free.app/api/room/{id}/"
-LOGS_API_URL = "https://c886-2804-16d8-c6fe-100-3c79-9e2b-5b62-8a35.ngrok-free.app/api/logs/{id}/"
+API_URL = "http://localhost:8000/api/room/{id}/"
+LOGS_API_URL = "http://localhost:8000/api/room/listAll/"
 
-#função que gera o relatório com logs
+# Função que gera o relatório com logs
 def generate_pdf_with_logs(door_info, logs, start_date, end_date):
     pdf = FPDF()
     pdf.set_auto_page_break(auto=True, margin=15)
@@ -44,7 +44,11 @@ def generate_pdf_with_logs(door_info, logs, start_date, end_date):
     pdf.set_font("Arial", size=10)
     
     for log in logs:
-        pdf.cell(200, 10, f"{log['timestamp']} - {log['event']} - {log['user']}", ln=True)
+        # Verifica se as chaves existem antes de acessá-las
+        timestamp = log.get("timestamp", "Data desconhecida")
+        event = log.get("event", "Evento desconhecido")
+        user = log.get("user", "Usuário desconhecido")
+        pdf.cell(200, 10, f"{timestamp} - {event} - {user}", ln=True)
 
     # Criando o nome do arquivo com base no código da sala
     room_code = door_info['code'].replace(" ", "_")
@@ -53,23 +57,23 @@ def generate_pdf_with_logs(door_info, logs, start_date, end_date):
     pdf.output(pdf_filename)
     return pdf_filename
 
-#exibe os logs
-def show_logs(porta_id):
+# Função para buscar logs (sem exibi-los na página)
+def fetch_logs(porta_id, token):
     try:
-        response = requests.get(LOGS_API_URL.format(id=porta_id))
+        headers = {
+            "Authorization": f"Bearer {token}"
+        }
+        response = requests.get(LOGS_API_URL.format(id=porta_id), headers=headers)
         if response.status_code == 200:
-            logs = response.json()
-            st.subheader("Logs da Sala")
-            for log in logs:
-                st.write(f"{log['timestamp']} - {log['event']} - {log['user']}")
-            return logs
+            return response.json()  # Retorna os logs sem exibi-los
         else:
             st.error(f"Erro ao buscar logs. Código: {response.status_code}")
             return []
     except requests.exceptions.RequestException as e:
         st.error(f"Erro de conexão com a API: {e}")
         return []
-#estrutura da pagina
+
+# Estrutura da página
 def show():
     st.title("Detalhes da Sala")
 
@@ -77,10 +81,18 @@ def show():
         st.warning("Nenhuma porta selecionada.")
         return
 
+    if "token" not in st.session_state:
+        st.error("Você precisa estar logado para acessar essa página.")
+        return
+
     porta_id = st.session_state.selected_door_id
+    token = st.session_state.token
 
     try:
-        response = requests.get(API_URL.format(id=porta_id))
+        headers = {
+            "Authorization": f"Bearer {token}"
+        }
+        response = requests.get(API_URL.format(id=porta_id), headers=headers)
         if response.status_code == 200:
             door_info = response.json()
 
@@ -102,8 +114,8 @@ def show():
             else:
                 st.write("**Administradores:** Nenhum")
 
-            # Exibir logs
-            logs = show_logs(porta_id)
+            # Buscar logs (sem exibi-los na página)
+            logs = fetch_logs(porta_id, token)
 
             # Gerar relatório PDF com logs e filtro por data
             st.subheader("Gerar Relatório PDF com Logs")
