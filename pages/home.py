@@ -94,13 +94,13 @@ def show():
 
     for idx, door in enumerate(filtered_doors):
         with cols[idx % 4]:
-            status = "Ativo" if door["admin"] else "Inativo"  # Define status baseado na presença de admins
+            status = "Disponível" if door["admin"] else "Indisponível"  # Define status baseado na presença de admins
             
             st.markdown(
                 f"""
                 <div style="border: 1px solid #ddd; padding: 15px; border-radius: 10px; text-align: center; background: white;">
                     <h4 style="margin: 0; color: black;">{door["name"]}</h4>
-                    <span style="color: {'green' if status == 'Ativo' else 'red'}; font-weight: bold; border: 1px solid; padding: 5px; border-radius: 5px;">
+                    <span style="color: {'green' if status == 'Disponível' else 'red'}; font-weight: bold; border: 1px solid; padding: 5px; border-radius: 5px;">
                         {status}
                     </span>
                 </div>
