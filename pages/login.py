@@ -38,18 +38,20 @@ def show():
             st.session_state.current_page = "login"
             st.rerun()
     else:
-        username = st.text_input("Usuário")
-        password = st.text_input("Senha", type="password")
+        with st.form(key='login_form'):
+            username = st.text_input("Usuário")
+            password = st.text_input("Senha", type="password")
+            submit_button = st.form_submit_button("Entrar")
 
-        if st.button("Entrar"):
-            user_data = authenticate_user(username, password)
+            if submit_button:
+                user_data = authenticate_user(username, password)
 
-            if user_data:
-                st.session_state.authenticated = True
-                st.session_state.username = username
-                st.session_state.token = user_data["access_token"]
-                st.success("Login bem-sucedido!")
-                st.session_state.current_page = "home"
-                st.rerun()
-            else:
-                st.error("Usuário ou senha incorretos!")
+                if user_data:
+                    st.session_state.authenticated = True
+                    st.session_state.username = username
+                    st.session_state.token = user_data["access_token"]
+                    st.success("Login bem-sucedido!")
+                    st.session_state.current_page = "home"
+                    st.rerun()
+                else:
+                    st.error("Usuário ou senha incorretos!")

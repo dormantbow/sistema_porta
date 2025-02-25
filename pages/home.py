@@ -100,7 +100,7 @@ def show():
                 f"""
                 <div style="border: 1px solid #ddd; padding: 15px; border-radius: 10px; text-align: center; background: white;">
                     <h4 style="margin: 0; color: black;">{door["name"]}</h4>
-                    <span style="color: {'green' if status == 'Ativo' else 'red'}; font-weight: bold; border: 1px solid; padding: 5px; border-radius: 5px;">
+                    <span style="color: {'green' if status == 'Disponível' else 'red'}; font-weight: bold; border: 1px solid; padding: 5px; border-radius: 5px;">
                         {status}
                     </span>
                 </div>
