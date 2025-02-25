@@ -94,7 +94,7 @@ def show():
 
     for idx, door in enumerate(filtered_doors):
         with cols[idx % 4]:
-            status = "Ativo" if door["admin"] else "Inativo"  # Define status baseado na presença de admins
+            status = "Disponível" if door["admin"] else "Indisponível"  # Define status baseado na presença de admins
             
             st.markdown(
                 f"""
