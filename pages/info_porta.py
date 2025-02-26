@@ -3,8 +3,16 @@ import requests
 from fpdf import FPDF
 from datetime import datetime
 
-API_URL = "http://localhost:8000/api/room/{id}/"
-LOGS_API_URL = "http://localhost:8000/api/room/listAll/"
+API_URL = "http://10.14.160.14:8080/api/room/{id}/"
+
+# Função para extrair logs do JSON retornado pela API
+def fetch_logs(door_info):
+    logs = []
+    if "iotobjects" in door_info and door_info["iotobjects"]:
+        first_iot_object = door_info["iotobjects"][0]  # Pega o primeiro objeto IoT
+        if "log" in first_iot_object:
+            logs = first_iot_object["log"]
+    return logs
 
 # Função que gera o relatório com logs
 def generate_pdf_with_logs(door_info, logs, start_date, end_date):
@@ -44,9 +52,8 @@ def generate_pdf_with_logs(door_info, logs, start_date, end_date):
     pdf.set_font("Arial", size=10)
     
     for log in logs:
-        # Verifica se as chaves existem antes de acessá-las
-        timestamp = log.get("timestamp", "Data desconhecida")
-        event = log.get("event", "Evento desconhecido")
+        timestamp = log.get("date", "Data desconhecida")
+        event = log.get("command", "Evento desconhecido")
         user = log.get("user", "Usuário desconhecido")
         pdf.cell(200, 10, f"{timestamp} - {event} - {user}", ln=True)
 
@@ -56,22 +63,6 @@ def generate_pdf_with_logs(door_info, logs, start_date, end_date):
 
     pdf.output(pdf_filename)
     return pdf_filename
-
-# Função para buscar logs (sem exibi-los na página)
-def fetch_logs(porta_id, token):
-    try:
-        headers = {
-            "Authorization": f"Bearer {token}"
-        }
-        response = requests.get(LOGS_API_URL.format(id=porta_id), headers=headers)
-        if response.status_code == 200:
-            return response.json()  # Retorna os logs sem exibi-los
-        else:
-            st.error(f"Erro ao buscar logs. Código: {response.status_code}")
-            return []
-    except requests.exceptions.RequestException as e:
-        st.error(f"Erro de conexão com a API: {e}")
-        return []
 
 # Estrutura da página
 def show():
@@ -89,10 +80,9 @@ def show():
     token = st.session_state.token
 
     try:
-        headers = {
-            "Authorization": f"Bearer {token}"
-        }
+        headers = {"Authorization": f"Bearer {token}"}
         response = requests.get(API_URL.format(id=porta_id), headers=headers)
+        
         if response.status_code == 200:
             door_info = response.json()
 
@@ -101,21 +91,21 @@ def show():
             st.write(f"**Departamento:** {door_info['department']['name']}")
 
             # Exibir coordenadores do departamento
-            if door_info["department"]["coordinators"]:
+            if door_info["department"].get("coordinators"):
                 coordinators = ", ".join(coord["user"] for coord in door_info["department"]["coordinators"])
                 st.write(f"**Coordenadores:** {coordinators}")
             else:
                 st.write("**Coordenadores:** Nenhum")
 
             # Exibir administradores
-            if door_info["admin"]:
+            if door_info.get("admin"):
                 admins = ", ".join(admin["user"] for admin in door_info["admin"])
                 st.write(f"**Administradores:** {admins}")
             else:
                 st.write("**Administradores:** Nenhum")
 
-            # Buscar logs (sem exibi-los na página)
-            logs = fetch_logs(porta_id, token)
+            # Buscar logs dentro de door_info
+            logs = fetch_logs(door_info)
 
             # Gerar relatório PDF com logs e filtro por data
             st.subheader("Gerar Relatório PDF com Logs")
@@ -126,10 +116,8 @@ def show():
                 pdf_filename = generate_pdf_with_logs(door_info, logs, start_date, end_date)
                 with open(pdf_filename, "rb") as file:
                     st.download_button("Baixar Relatório PDF com Logs", file, file_name=pdf_filename, mime="application/pdf")
-
         else:
             st.error(f"Erro ao buscar dados da API. Código: {response.status_code}")
-
     except requests.exceptions.RequestException as e:
         st.error(f"Erro de conexão com a API: {e}")
 

@@ -2,7 +2,7 @@ import streamlit as st
 import requests
 
 # Corrigindo a URL base sem barra no final
-API_BASE_URL = "http://localhost:8000/api/auth/"
+API_BASE_URL = "http://10.14.160.14:8080/api/auth/"
 
 def authenticate_user(username, password):
     """ Faz requisição para o backend e retorna o token JWT """

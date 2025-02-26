@@ -9,7 +9,7 @@ def get_doors():
         st.error("Você precisa estar logado para acessar essa página.")
         st.stop()  # Para a execução do código aqui
     
-    api_url = "http://localhost:8000/api/room/listAll/"
+    api_url = "http://10.14.160.14:8080/api/room/listAll/"
     headers = {
         "Authorization": f"Bearer {st.session_state.token}"  # Corrigido aqui
     }
