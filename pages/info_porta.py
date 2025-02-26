@@ -3,7 +3,7 @@ import requests
 from fpdf import FPDF
 from datetime import datetime
 
-API_URL = "http://10.14.160.14:8080/api/room/{id}/"
+API_URL = "http://192.168.159.236:8080/api/room/{id}/"
 
 # Função para extrair logs do JSON retornado pela API
 def fetch_logs(door_info):
