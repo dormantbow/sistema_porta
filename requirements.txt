@@ -1,8 +1,5 @@
 streamlit
-pandas
-numpy
 requests
-fpdf
 mysql-connector-python
 bcrypt
 validate-docbr
